@@ -5,7 +5,8 @@ from dataclasses import dataclass
 from src.logger import logging
 from src.exception import customException
 from sklearn.model_selection import train_test_split
-
+from src.components.data_transformation import dataTransformationConfig
+from src.components.data_transformation import dataTransformation
 #USE DATA CLASS WHEN YOU ONLY WAN TO INITIALIZE VARIABLE IF IT ALSO HAS FUNCTION GO WITH NORMAL CLASSES
 @dataclass
 class dataIngestionConfig:
@@ -25,8 +26,10 @@ class dataIngestion:
             df=pd.read_csv("notebook/data/stud.csv")
             logging.info("READ THE DATA SET AS DATA FRAME")
             
+            #below line returns parental directory 
             os.makedirs(os.path.dirname(self.dataIngestion.train_data_path),exist_ok=True)
             
+            #storing raw 
             df.to_csv(self.dataIngestion.raw_data_path,index=False,header=True)
             logging.info("INITIATE TRAIN AND TEST SET")
             train_set,test_set=train_test_split(df,test_size=0.2,random_state=42)
@@ -35,6 +38,8 @@ class dataIngestion:
             test_set.to_csv(self.dataIngestion.test_data_path,index=False,header=True)
             
             logging.info("DATA INGESTION COMPLETED")
+            
+            #returning as it will be beneficial in pipelining
             return(
                 self.dataIngestion.train_data_path,
                 self.dataIngestion.test_data_path
@@ -46,9 +51,9 @@ class dataIngestion:
         
 if __name__ == "__main__":
     obj=dataIngestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data=obj.initiate_data_ingestion()
             
-        
-    
+    data_transformation=dataTransformation()
+    data_transformation.initiate_data_tranformation(train_data,test_data)    
     
     
