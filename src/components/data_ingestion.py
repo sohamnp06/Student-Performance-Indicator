@@ -7,6 +7,10 @@ from src.exception import customException
 from sklearn.model_selection import train_test_split
 from src.components.data_transformation import dataTransformationConfig
 from src.components.data_transformation import dataTransformation
+from src.components.model_trainer import modelTrainerConfig
+from src.components.model_trainer import modelTrainer
+
+
 #USE DATA CLASS WHEN YOU ONLY WAN TO INITIALIZE VARIABLE IF IT ALSO HAS FUNCTION GO WITH NORMAL CLASSES
 @dataclass
 class dataIngestionConfig:
@@ -54,6 +58,7 @@ if __name__ == "__main__":
     train_data,test_data=obj.initiate_data_ingestion()
             
     data_transformation=dataTransformation()
-    data_transformation.initiate_data_tranformation(train_data,test_data)    
+    train_arr,test_arr,_=data_transformation.initiate_data_tranformation(train_data,test_data)    
     
-    
+    modelTrainer=modelTrainer()
+    print(modelTrainer.initiate_model_trainer(train_arr,test_arr))
